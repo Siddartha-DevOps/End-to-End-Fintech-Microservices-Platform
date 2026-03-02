@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finbank-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finbank-frontend
+  template:
+    metadata:
+      labels:
+        app: finbank-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: finbank-frontend
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
