@@ -1,0 +1,5 @@
+FROM postgres:15
+
+ENV POSTGRES_USER=finbank
+ENV POSTGRES_PASSWORD=finbank123
+ENV POSTGRES_DB=finbankdb
