@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: finbank-db
+    environment:
+      POSTGRES_USER: finbank
+      POSTGRES_PASSWORD: finbank123
+      POSTGRES_DB: finbankdb
+    ports:
+      - "5432:5432"
+    networks:
+      - finbank-net
+
+  backend:
+    build: ./backend
+    container_name: finbank-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - finbank-net
+
+  frontend:
+    build: ./frontend
+    container_name: finbank-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - finbank-net
+
+networks:
+  finbank-net:
+    driver: bridge
