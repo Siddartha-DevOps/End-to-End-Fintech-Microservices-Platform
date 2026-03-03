@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: finbank-frontend
-        imagePullPolicy: Never
+        image: 476898871280.dkr.ecr.us-east-1.amazonaws.com/finbank-frontend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80

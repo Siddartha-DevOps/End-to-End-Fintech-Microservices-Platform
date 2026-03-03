@@ -14,16 +14,52 @@ spec:
     spec:
       containers:
       - name: backend
-        image: finbank-backend
-        imagePullPolicy: Never
+        image:  476898871280.dkr.ecr.us-east-1.amazonaws.com/finbank-backend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
+
+        # Use Secret for DB credentials
         env:
         - name: DB_HOST
           value: postgres-service
         - name: DB_USER
-          value: finbank
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_USER
         - name: DB_PASSWORD
-          value: finbank123
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
         - name: DB_NAME
-          value: finbankdb
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_DB
+
+        # Readiness Probe
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        # Liveness Probe
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+
+        # Resource Limits
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
